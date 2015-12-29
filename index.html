@@ -1,0 +1,200 @@
+<html ng-app="demoApp">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Frontend You Know Nothing</title>
+
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
+    <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
+    <link rel="stylesheet" href="bower_components/angular-material-data-table/dist/md-data-table.css">
+
+
+    <style>
+
+        @font-face {
+            font-family: 'Material Icons';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Material Icons'), local('MaterialIcons-Regular'), url(https://fonts.gstatic.com/s/materialicons/v10/2fcrYFNaTjcS6g4U3t-Y5UEw0lE80llgEseQY3FEmqw.woff2) format('woff2');
+        }
+
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+
+        md-card:first-child {
+            padding: 8px 8px 8px 24px;
+        }
+
+        .checkboxes > md-checkbox {
+            margin: 0;
+            padding: 16px;
+            min-width: 300px;
+            flex: 0 0 auto;
+        }
+
+
+    </style>
+</head>
+
+<body layout="column">
+
+<md-toolbar class="md-whiteframe-1dp">
+    <div class="md-toolbar-tools">
+        <div class="md-title">Frontend You Know Nothing - Frontend framework comparison in year 2015</div>
+
+    </div>
+</md-toolbar>
+
+<md-content laout="column" flex ng-controller="tableController" ng-cloak>
+
+    <md-card>
+        <div layout="row" layout-wrap class="checkboxes">
+            <md-checkbox ng-model="options.rowSelection">每行可选</md-checkbox>
+            <md-checkbox ng-model="options.autoSelect">点击自动选中该行</md-checkbox>
+            <md-checkbox ng-model="options.largeEditDialog">增强的评论输入框</md-checkbox>
+            <md-checkbox ng-model="options.boundaryLinks">分页可选择首尾页</md-checkbox>
+            <!--<md-checkbox ng-model="options.pageSelector">Pagination Page Selector</md-checkbox>-->
+        </div>
+    </md-card>
+
+    <md-card>
+
+        <md-toolbar class="md-table-toolbar md-default" ng-hide="options.rowSelection && selected.length">
+            <div class="md-toolbar-tools">
+                <span>前端框架/库 功能对比</span>
+                <div flex></div>
+                <md-button ng-click="loadStuff()">异步操作</md-button>
+            </div>
+        </md-toolbar>
+
+        <md-toolbar class="md-table-toolbar alternate" ng-show="options.rowSelection && selected.length">
+            <div class="md-toolbar-tools">
+                <span>{{selected.length}} {{selected.length > 1 ? 'items' : 'item'}} selected</span>
+            </div>
+        </md-toolbar>
+
+
+
+        <md-table-container>
+            <table md-table md-row-select="options.rowSelection" ng-model="selected" md-progress="promise">
+                <thead md-head md-order="query.order" md-on-reorder="logOrder">
+                    <tr md-row>
+                        <th md-column ><span>框架/库</span></th>
+                        <th md-column ><span><a href="https://jquery.com/" target="_blank">jQuery</a></span></th>
+                        <th md-column ><span><a href="http://backbonejs.org/" target="_blank">Backbone</a></span></th>
+                        <th md-column ><span><a href="http://emberjs.com/" target="_blank">Ember</a></span></th>
+                        <th md-column ><span><a href="http://knockoutjs.com/" target="_blank">Knockout</a></span></th>
+                        <th md-column ><span><a href="https://angularjs.org/" target="_blank">Angular</a></span></th>
+                        <th md-column ><span><a href="https://angular.io/" target="_blank">Angular2</a></span></th>
+
+                        <th md-column ><span><a href="http://vuejs.org/" target="_blank">Vue</a></span></th>
+                        <th md-column ><span><a href="https://avalonjs.github.io/" target="_blank">Avalon</a></span></th>
+
+                        <th md-column ><span><a href="https://facebook.github.io/react/" target="_blank">React Flux/Redux</a></span></th>
+                    </tr>
+                </thead>
+
+                <tbody md-body>
+                    <tr md-row md-select="item" md-on-select="logItem" md-auto-select="options.autoSelect" ng-repeat="item in data.frameworkData  | limitTo: query.limit : (query.page -1) * query.limit">
+                        <td md-cell >{{item.name}}</td>
+
+                        <td md-cell>
+                            <md-select ng-model="item.jquery" placeholder="Other">
+                                <md-option ng-value="type" ng-repeat="type in getOptionTypes()">{{type}}</md-option>
+                            </md-select>
+                        </td>
+
+                        <td md-cell>
+                            <md-select ng-model="item.backbone" placeholder="Other">
+                                <md-option ng-value="type" ng-repeat="type in getOptionTypes()">{{type}}</md-option>
+                            </md-select>
+                        </td>
+
+                        <td md-cell>
+                            <md-select ng-model="item.ember" placeholder="Other">
+                                <md-option ng-value="type" ng-repeat="type in getOptionTypes()">{{type}}</md-option>
+                            </md-select>
+                        </td>
+
+                        <td md-cell>
+                            <md-select ng-model="item.knockout" placeholder="Other">
+                                <md-option ng-value="type" ng-repeat="type in getOptionTypes()">{{type}}</md-option>
+                            </md-select>
+                        </td>
+
+                        <td md-cell>
+                            <md-select ng-model="item.angular" placeholder="Other">
+                                <md-option ng-value="type" ng-repeat="type in getOptionTypes()">{{type}}</md-option>
+                            </md-select>
+                        </td>
+
+                        <td md-cell>
+                            <md-select ng-model="item.angular2" placeholder="Other">
+                                <md-option ng-value="type" ng-repeat="type in getOptionTypes()">{{type}}</md-option>
+                            </md-select>
+                        </td>
+
+                        <td md-cell>
+                            <md-select ng-model="item.vue" placeholder="Other">
+                                <md-option ng-value="type" ng-repeat="type in getOptionTypes()">{{type}}</md-option>
+                            </md-select>
+                        </td>
+
+                        <td md-cell>
+                            <md-select ng-model="item.avalon" placeholder="Other">
+                                <md-option ng-value="type" ng-repeat="type in getOptionTypes()">{{type}}</md-option>
+                            </md-select>
+                        </td>
+
+                        <td md-cell>
+                            <md-select ng-model="item.react" placeholder="Other">
+                                <md-option ng-value="type" ng-repeat="type in getOptionTypes()">{{type}}</md-option>
+                            </md-select>
+                        </td>
+
+                        <td md-cell ng-click="editComment($event, item)" ng-class="{'md-placeholder': !item.comment}">
+                            {{item.comment || 'Add a comment'}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </md-table-container>
+
+        <md-table-pagination md-limit="query.limit" md-page="query.page" md-total="{{data.count}}" md-page-select="options.pageSelector" md-boundary-links="options.boundaryLinks" md-on-paginate="logPagination"></md-table-pagination>
+    </md-card>
+</md-content>
+
+
+
+
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/angular-animate/angular-animate.min.js"></script>
+<script src="bower_components/angular-aria/angular-aria.min.js"></script>
+<script src="bower_components/angular-material/angular-material.min.js"></script>
+<script src="bower_components/angular-material-data-table/dist/md-data-table.js"></script>
+<script src="app/js/app.js"></script>
+
+</body>
+</html>
